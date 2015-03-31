@@ -15,9 +15,9 @@ func main() {
 	// Use different random numbers each time this program is executed.
 	rand.Seed(time.Now().Unix())
 
-	const strings = 100
+	const strings = 32
 	const producers = 4
-	const consumers = 4
+	const consumers = 2
 
 	before := time.Now()
 	ch := make(chan string)
@@ -35,7 +35,6 @@ func main() {
 	close(ch)  // Close the channel and then wait for the consumers to be done before printing time.
 	wgp2.Wait()
 	fmt.Println("time:", time.Now().Sub(before))
-	select {}
 }
 
 // Produce sends n different strings on the channel and notifies wg when done.
@@ -83,6 +82,6 @@ Kan man vara säker på att alla strängar blir utskrivna innan programmet stann
 - Hypotes: Om man också sätter ett wgp.Wait() resp. wg.Done() för consume. Det finns redan en för Produce som gör att
 den kommer att köras tills alla strängar är skapade och skickade in till kanalen. Med en liknande grej för consume
 borde det gå att garantera.
-- Test: La till consumers i wgp och ändrade consumers metodhuvud för att skicka med wgp'n. Nu borde det funka som det gjorde innan
-både för producers och consumers
+- Test: La till consumers i en ny wgp och ändrade consumers metodhuvud för att skicka med wgp'n. Nu borde det funka som det gjorde innan
+både för producers och consumers.
 */
